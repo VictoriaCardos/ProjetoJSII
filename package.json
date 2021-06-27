@@ -19,6 +19,7 @@
   },
   "scripts": {
     "dev": "webpack server --mode=development",
-    "prod": "webpack --mode=production"
+    "prod": "webpack --mode=production",
+    "teste": "babel src/main.js -o ./bundle.js"
   }
 }
