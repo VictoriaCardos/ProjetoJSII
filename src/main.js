@@ -1,3 +1,5 @@
+import api from './api';
+
 class App{
   //Construtor
   construtor(){
@@ -18,16 +20,28 @@ class App{
     this.formulario.onsubmit = evento => this.adicionarRepositorio(evento);
   }
 
-  adicionarRepositorio(evento){
+  async adicionarRepositorio(evento){
     //evita que o formulario recarregue a página
     evento.preventDefault();
 
+    //recupera o valor do input
+    let input = this.formulario.querySelector('input[id=repositorio]').value;
+
+    //se o input vier vazio... sai do app
+    if(input.length === 0){
+      return; //return sempre sai da função
+    }
+
+    let response = await api.get(`/repos/${input}`);
+    
+    let {name, description, html_url, owner: {avatar_url}} = response.data;
+
     //adiciona o repositório na Lista
     this.repositorios.push({
-      nome: 'inventei',
-      descricao: 'sei la',
-      avatar_url: 'https://seila.com',
-      link: 'https://seila.com',
+      nome: name,
+      descricao: description,
+      avatar_url,
+      link: html_url,
     });
 
     //renderiza a tela
@@ -39,7 +53,7 @@ class App{
     this.lista.innerHTML = '';
 
     //percorre toda a lista de repositório e cria os elementos
-    this.repositórios.forEach(repositorio =>{
+    this.repositorios.forEach(repositorio =>{
       
 
       //<li>
